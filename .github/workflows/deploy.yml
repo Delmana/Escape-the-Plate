@@ -3,7 +3,7 @@ name: Build and Deploy Unity WebGL to GitHub Pages
 on:
   push:
     branches:
-      - main  # Passe den Branch an, falls nötig
+      - main
 
 jobs:
   build:
@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          lfs: true  # Aktiviert Git LFS
+          lfs: true
 
       - name: Cache Unity packages
         uses: actions/cache@v3
@@ -25,15 +25,15 @@ jobs:
       - name: Install Unity and Build project
         uses: game-ci/unity-builder@v2
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}  # Lizenzdatei aus GitHub Secrets
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
-          unityVersion: 2022.3.9f1  # Setze deine Unity-Version
+          unityVersion: 2022.3.0f1  # Ältere Unity-Version, die unterstützt wird
           targetPlatform: WebGL
-          projectPath: .  # Setze das Projektverzeichnis auf das Wurzelverzeichnis
-          buildsPath: build/WebGL  # Der Pfad, wo die Builds gespeichert werden
+          projectPath: .
+          buildsPath: build/WebGL
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/WebGL  # Passe dies an den Output-Pfad an, wohin der Unity-Build ausgegeben wird
+          publish_dir: build/WebGL
