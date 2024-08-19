@@ -1,33 +1,37 @@
-name: Deploy to GitHub Pages
+name: Deploy Unity WebGL to GitHub Pages
 
 on:
   push:
     branches:
-      - main  # Passe das an deinen Branch an
+      - main  # Passe diesen Branch an, falls notwendig
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           lfs: true  # Aktiviert Git LFS
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Unity
+        uses: game-ci/unity-setup@v2
         with:
-          node-version: '14'
+          unityVersion: 2021.3.0f1  # Ersetze dies durch deine Unity-Version
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build the project
-        run: npm run build  # Passe diesen Schritt an, falls du einen anderen Build-Befehl verwendest
+      - name: Build Unity project
+        run: |
+          xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' \
+          /opt/unity/Editor/Unity \
+          -projectPath . \
+          -quit \
+          -batchmode \
+          -buildTarget WebGL \
+          -executeMethod BuildScript.BuildWebGL \
+          -logFile /dev/stdout
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Build  # Passe diesen Pfad an den Output deines Builds an
+          publish_dir: build/WebGL  # Passe dies an den Pfad an, wohin der Unity-Build ausgegeben wird
