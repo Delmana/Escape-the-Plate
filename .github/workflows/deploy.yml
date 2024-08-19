@@ -40,4 +40,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/WebGL  # Passe dies an den Output-Pfad an, wohin der Unity-Build ausgegeben wird
+          publish_dir: build/WebGL  # Passe dies an den Output-Pfad an, wohin der Unity-Build ausgegeben wird 
