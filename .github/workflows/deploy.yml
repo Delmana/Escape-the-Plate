@@ -22,27 +22,17 @@ jobs:
           restore-keys: |
             Library-${{ runner.os }}-
 
-      - name: Activate Unity License
-        uses: game-ci/unity-activate@v1
-        with:
-          unityLicense: ${{ secrets.UNITY_LICENSE }}
-
-      - name: Install Unity
+      - name: Install and Build Unity project
         uses: game-ci/unity-builder@v2
         with:
           unityVersion: 2022.3.9f1  # Ersetze dies durch deine Unity-Version
           targetPlatform: WebGL
-
-      - name: Build Unity project
-        uses: game-ci/unity-builder@v2
-        with:
-          unityVersion: 2022.3.9f1
-          targetPlatform: WebGL
           buildName: WebGL
-          buildPath: Build
+          buildPath: build/WebGL
+          unityLicense: ${{ secrets.UNITY_LICENSE }}  # Hier die Lizenz angeben
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: Build # Passe dies an den Output-Pfad an, wohin der Unity-Build ausgegeben wird
+          publish_dir: build/WebGL  # Passe dies an den Output-Pfad an, wohin der Unity-Build ausgegeben wird
