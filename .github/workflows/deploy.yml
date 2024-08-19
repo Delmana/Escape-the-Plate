@@ -22,14 +22,15 @@ jobs:
           restore-keys: |
             Library-${{ runner.os }}-
 
-      - name: Install and Build Unity project
+      - name: Install Unity and Build project
         uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}  # Lizenzdatei aus GitHub Secrets
         with:
-          unityVersion: 2022.3.9f1  # Ersetze dies durch deine Unity-Version
+          unityVersion: 2022.3.9f1  # Setze deine Unity-Version
           targetPlatform: WebGL
           projectPath: .  # Setze das Projektverzeichnis auf das Wurzelverzeichnis
           buildsPath: build/WebGL  # Der Pfad, wo die Builds gespeichert werden
-          unityLicensingServer: ${{ secrets.UNITY_LICENSE }}  # Hier die Lizenz angeben
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
